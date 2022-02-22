@@ -46,3 +46,26 @@ class PostListTests(TestCase):
       """
       post1 = Post.objects.create(title='title1', text='text1')
       post2 = Post.objects.create(title='title2', text='text2')
+
+class PostCreateTests(TestCase):
+    """PostCreateビューのテストクラス."""
+
+    def test_get(self):
+        """GET メソッドでアクセスしてステータスコード200を返されることを確認"""
+        response = self.client.get(reverse('blog:post_create'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_post_with_data(self):
+        """適当なデータで POST すると、成功してリダイレクトされることを確認"""
+        data = {
+            'title': 'test_title',
+            'text': 'test_text',
+        }
+        response = self.client.post(reverse('blog:post_create'), data=data)
+        self.assertEqual(response.status_code, 302)
+    
+    def test_post_null(self):
+        """空のデータで POST を行うとリダイレクトも無く 200 だけ返されることを確認"""
+        data = {}
+        response = self.client.post(reverse('blog:post_create'), data=data)
+        self.assertEqual(response.status_code, 200)
